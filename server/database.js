@@ -30,20 +30,20 @@ db.login = function (req, res) {
                 let hash = crypto.pbkdf2Sync(req.body.password, row.salt, 1000, 64, `sha512`).toString('hex');
                 if (hash === row.hash) {
                     let token = jwt.sign({username: username}, 'secret', {expiresIn: '1000h'})
-                    res.send({
+                    res.send ( {
                         message: 'login successful',
                         success: true,
                         token: token,
                         username: username,
+                        firstname: row.firstname,
                         url: '/home'
-                    })
+                    } )
                 }
                 else {
                     res.send({
                         message: 'password incorrect',
                         success: false,
                         url: '/login',
-
                     })
                 }
             }
