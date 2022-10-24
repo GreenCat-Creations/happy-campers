@@ -1,0 +1,151 @@
+
+<form>
+    <table>
+        <tr>
+            <td>
+                <label for="firstname">First Name</label><br>
+                <input
+                id="firstname"
+                type="text"
+                required
+                onblur="
+                 var div = document.getElementById('fname_hint')
+                showHint(this, div, 'This field is required.')"
+                ></input>
+                <div id="fname_hint" class="hint"></div>
+            </td>
+
+            <td>
+                <label for="lastname">Last Name</label><br>
+                <input
+                id="lastname"
+                type="text"
+                required
+                onblur="
+                var div = document.getElementById('lname_hint')
+                showHint(this, div, 'This field is required.')"
+               ></input>
+               <div id="lname_hint" class="hint"></div>
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <label>Username</label><br>
+                <input id="username" 
+                type="text"
+                pattern="[A-Za-z]{4,12}"
+                required
+                onblur=" 
+                var div = document.getElementById('username_hint')
+                showHint(this, div, 'This field is required.')"
+                ></input><br>
+                <div id="username_hint" class="hint"></div>
+            </td>
+
+            <td>
+                <label>Password</label><br>
+                <input id="password" 
+                type="text" 
+                pattern=".{8,}"
+                required
+                onblur=" 
+                var div = document.getElementById('password_hint')
+                showHint(this, div, 'Password must be at least 8 characters.')"
+                ></input><br>
+                <div id="password_hint" class="hint"></div>
+            </td>
+        </tr>
+
+        <tr>
+            <!-- <td>
+                <label>Confirm Password</label><br>
+                <input id="confirm_password" 
+                type="text" 
+                pattern=".{8,}"
+                required
+                onblur=" 
+                var div = document.getElementById('confirm_password_hint')
+                showHint(this, div, 'Password must be at least 8 characters.')"
+                ></input><br>
+                <div id="confirm_password_hint" class="hint"></div>
+            </td> -->
+
+            <td>
+                <label>Email</label><br>
+                <input id="email" 
+                type="email" 
+                required
+                onblur=" 
+                var div = document.getElementById('email_hint')
+                showHint(this, div, 'This field is required.')"
+                ></input><br>
+                <div id="email_hint" class="hint"></div>
+
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <label>Phone Number</label><br>
+                <input id="phone_number" 
+                type="tel" 
+                pattern="[0-9]{10} | [0-9]{3}-[0-9]{3}-[0-9]{4}
+                "
+                required
+                onblur=" 
+                var div = document.getElementById('phone_number_hint')
+                showHint(this, div, 'Phone number must be in the format 123-456-7890.')"
+                ></input><br>
+                <div id="phone_number_hint" class="hint"></div>
+
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <input id="register" type="submit" value="Register" onclick="
+                var firstname = document.getElementById('firstname').value;
+                var lastname = document.getElementById('lastname').value;
+                var username = document.getElementById('username').value;
+                var password = document.getElementById('password').value;
+                // var confirm_password = document.getElementById('confirm_password').value;
+                var email = document.getElementById('email').value;
+                var phonenumber = document.getElementById('phone_number').value;
+
+                // if (password != confirm_password) {
+                //     alert('Passwords do not match.');
+                //     return false;
+                // }
+
+                $.post('/api/registration', {
+                    firstname: firstname,
+                    lastname: lastname,
+                    username: username,
+                    password: password,
+                    email: email,
+                    phonenumber: phonenumber
+                }, function(data) {
+                    if (data.success) {
+                        sessionStorage.setItem('username', data.username)
+                        window.location.href = '/home';
+                    } else {
+                        console.log(data)
+                        alert('Registration failed. Please try again.');
+                    }
+                });
+                return false;
+                "></input>
+            </td>
+    </table>
+</form>
+
+<script>
+    function showHint (self, hint, html) {
+        if (self.checkValidity() === false) {
+            hint.innerHTML = html
+        } else {
+            hint.innerHTML = ''
+        }
+    }
+</script>

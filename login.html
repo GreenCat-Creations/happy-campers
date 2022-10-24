@@ -1,0 +1,40 @@
+<style>
+    #notFound {
+        display: none;
+        color:red;
+        font-size: 1em;
+        text-align: center;
+    }
+</style>
+
+<form method="post" action="/api/login">
+    <label style="color: white">Username</label><br>
+    <input name="username" id="usernamefield" type="text" value=""></input><br>
+    <label style="color: white">Password</label><br>
+    <input name="password" id="passwordfield" type="password" value=""></input><br>
+    <input id="login" type="submit" value = "LOG IN" 
+    onclick ='      
+        var username = document.getElementById("usernamefield").value;
+        var password = document.getElementById("passwordfield").value;
+
+        $.post("/api/login", {
+            username,
+            password
+            }, 
+
+            function(data) {
+                if (data.success) {
+                    alert(data.message)
+                    sessionStorage.setItem("username", data.username)
+                    window.location.href = data.url
+                } else {
+                    $("#notFound").show();
+                    alert(data.message)
+
+                }
+            });
+    '>
+</form>
+<div id="notFound">Your username or password was not found.</div>
+<a href="/registration">Register</a>
+
