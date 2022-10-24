@@ -1,0 +1,132 @@
+<style>
+.nav {
+    position: sticky;
+    top:0;
+    height: 5em;
+    width: 100%;
+    background-color: rgb(8,60,132);
+    border-bottom: outset 4px rgb(25, 25, 25);
+    padding-bottom: 10%;
+    padding: 0;
+}
+.nav img {
+    height: 4.8em;
+}
+.hidden {
+    display: none !important;
+}
+#menu {
+    cursor: pointer;
+    position:fixed;
+    right: 0.5em;
+    top: 0.2em;
+    padding: 1%;
+    background: none;
+    border: none;
+    margin: auto;
+}
+
+.hamburger {
+    width: 50;
+    height: 5;
+    border: solid 2px gray;
+    border-style: outset;
+    background-color: white;
+    margin: auto;
+    margin-top: 10%;
+    border-radius: 25% 20% / 85% 120%;
+}
+
+.selected {
+    display: inline-block !important;
+}
+
+.selected hr {
+    border-style: inset !important;
+    background-color: gray;
+}
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+#dropdown-content {
+    display: inline-block;
+    position: absolute;
+    background: linear-gradient(90deg, rgb(106, 38, 106), rgb(151,62,148));
+    min-width: 8em;
+    right:0;
+    box-shadow: 20px 18px 16px 0px rgb(0,0,0,1);
+    border: inset 2px rgb(25, 25, 25);
+    border-radius: 10px;
+    text-align: left;
+    font-size: 3em;
+    line-height: 1.8;
+}
+
+#dropdown-content a {
+    text-decoration: none;
+    color: white;
+}
+
+#dropdown-content li {
+    margin-left: 5%;
+    color: white;
+    list-style: disc;
+}
+</style>
+
+<div class="nav">
+    <a href="homepage"><img src="/favicon.ico"></a>
+    <button id="menu" value="X" onclick="dropdown()">
+        <hr class="hamburger">
+        <hr class="hamburger">
+        <hr class="hamburger">
+        <div id="dropdown-content" class="hidden">
+            <ol>
+                <li><a href="homepage">Home</a></li>
+                <li><a href="camper">My Camper</a></li>
+                <li><a href="handbook">Handbook</a></li>
+                <li><a href="packing">Packing</a></li>
+                <li><a href="account">My Account</a></li>
+                <li><a onclick = "
+                    if (confirm('Are you sure you want to log out?')) {
+                        sessionStorage.clear();
+                        window.location.href = '/login';
+                    } else {
+                        return false;
+                    }">Log Out</a></li>
+            </ol>
+        </div>
+    </button>
+
+<script>
+function dropdown () {
+    let dropdown = document.getElementById("dropdown-content")
+    dropdown.classList.toggle("hidden")
+    let button = document.getElementById("menu")
+    button.classList.toggle("selected")
+
+    let url = window.location.href
+    let items = dropdown.children[0].children
+
+    dropdown.animate([
+        {transform: 'translateX(100%)'},
+        {transform: 'translateX(0%)'},
+
+    ], {
+        duration: 300,
+        fill: 'forwards',
+    })
+    
+    for (let i = 0; i < 5; i++) {
+        if (items[i].children[0].href == url) {
+            items[i].children[0].style.color = "rgb(70, 15, 70)"
+            items[i].children[0].style.fontWeight = "bold"
+            items[i].children[0].style.textDecoration = "underline"
+        }
+    }
+}
+    </script>
+</div>
+
