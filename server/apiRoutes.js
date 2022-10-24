@@ -7,7 +7,9 @@ module.exports = function(app) {
         });
 
     app.post("/api/registration", function(req, res) {
-        db.createAccount(req, res)
+        db.createAccount(req, res, function(data) {
+            res.send(data)
+        })
     });
 
 }

@@ -12,28 +12,31 @@
     <input name="username" id="usernamefield" type="text" value=""></input><br>
     <label style="color: white">Password</label><br>
     <input name="password" id="passwordfield" type="password" value=""></input><br>
-    <input id="login" type="submit" value = "LOG IN" 
-    onclick ='      
+    <input id="login" type="submit" value = "LOG IN"
+    onclick ='
+
         var username = document.getElementById("usernamefield").value;
         var password = document.getElementById("passwordfield").value;
 
         $.post("/api/login", {
             username,
             password
-            }, 
+            },
 
             function(data) {
                 if (data.success) {
                     alert(data.message)
                     sessionStorage.setItem("username", data.username)
-                    window.location.href = data.url
+                    sessionStorage.setItem("firstname", data.firstname)
+                    document.cookie = data.token;
+                    window.location.replace("/home")
                 } else {
+
                     $("#notFound").show();
                     alert(data.message)
-
                 }
-            });
-    '>
+            });'></input>
+
 </form>
 <div id="notFound">Your username or password was not found.</div>
 <a href="/registration">Register</a>
