@@ -1,0 +1,36 @@
+<h1>Account Information</h1>
+
+<script>
+    window.onload = function() {
+        $.post ("/api/getAccountInfo", {username: sessionStorage.getItem("username")}, function(data) {
+            var form = document.createElement("form")
+            var table = document.createElement("table")
+            for (item in data) {
+                var row = document.createElement("tr")
+                var td = document.createElement("td")
+                let input = document.createElement("input")
+                input.type = "text"
+                input.value = data[item]
+                td.innerHTML = item
+                row.appendChild(td)
+                row.appendChild(input)
+                table.appendChild(row)
+            }
+            form.appendChild(table)
+            document.body.appendChild(form)
+            document.body.appendChild(form)
+            let button = document.createElement("button")
+            button.innerHTML = "Save"
+            button.onclick = function() {
+                let data = {}
+                for (let i = 0; i < table.rows.length; i++) {
+                    data[table.rows[i].cells[0].innerHTML] = table.rows[i].cells[1].children[0].value
+                }
+                $.post("/api/updateAccountInfo", data, function(data) {
+                    alert("Account information updated!")
+                })
+            }
+            document.body.appendChild(button)   
+        })
+    }
+</script>

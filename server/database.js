@@ -9,6 +9,7 @@ db.serialize( function () {
     lastname TEXT, email TEXT, phonenumber TEXT, created TEXT, updated TEXT)`)
 })
 
+
 function hashPassword (password, callback) {
     var salt = crypto.randomBytes(16).toString('hex');
     var hash = crypto.pbkdf2Sync(password, salt, 1000, 64, `sha512`).toString('hex');
@@ -34,7 +35,7 @@ db.login = function (req, res) {
                         message: 'login successful',
                         success: true,
                         token: token,
-                        username: username,
+                        username: row.username,
                         firstname: row.firstname,
                         url: '/home'
                     } )
@@ -76,11 +77,24 @@ db.createAccount = function(req, res) {
               else {
                 res.send({
                   message : 'account created',
-                  success : true, 
+                  success : true,
                 })
               }
             })
         })}
+    })
+  }
+
+  db.getAccountInfo = function(req, res) {
+    console.log(req.body)
+    db.get(`SELECT * FROM accounts WHERE username = '${req.body.username}'`, (err, row) => {
+      if (err) {
+        console.log(err)
+      }
+      else {
+        res.send(row)
+        console.log(row)
+      }
     })
   }
 
