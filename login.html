@@ -28,7 +28,6 @@
                     alert(data.message)
                     sessionStorage.setItem("username", data.username);
                     sessionStorage.setItem("firstname", data.firstname);
-                    document.cookie = data.token;
                     window.location.replace("/home")
                 } else {
 

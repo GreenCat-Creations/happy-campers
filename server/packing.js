@@ -1,4 +1,4 @@
-var db = require('./database.js')
+var accounts = require('./accounts.js')
 var packing = []
 
 packing.list = [
@@ -7,7 +7,6 @@ packing.list = [
     'shampoo',
     'conditioner',
     'soap',
-
 ]
 
 packing.createRow = function(req, res) {
@@ -19,7 +18,7 @@ packing.createRow = function(req, res) {
     let placeholders = list.map((item) => '?').join(',')
     let sql = `INSERT INTO packing VALUES (${placeholders})`
     list[0] = req.body.username
-    db.run(sql, list, (err) => {
+    accounts.run(sql, list, (err) => {
         if (err) {
             console.log(err)
         }
@@ -36,7 +35,7 @@ packing.createRow = function(req, res) {
     
 
 packing.getPackingList = function(req, res) {
-    db.all(`SELECT * FROM packing WHERE username = '${req.body.username}'`, (err, row) => {
+    accounts.all(`SELECT * FROM packing WHERE username = '${req.body.username}'`, (err, row) => {
         if (err) { console.log(err) }
         if (row !== undefined && row.length > 0) {
             let checked = []
@@ -64,7 +63,7 @@ packing.getPackingList = function(req, res) {
 }
 
 packing.updatePackingList = function(req, res) {
-    db.get(`SELECT * FROM packing WHERE username = '${req.body.username}'`, (err, row) => {
+    accounts.get(`SELECT * FROM packing WHERE username = '${req.body.username}'`, (err, row) => {
         if (err) {
             console.log(err)
         }
@@ -75,7 +74,7 @@ packing.updatePackingList = function(req, res) {
                 pairs.push(`${req.body.field[i]} = '${req.body.checked[i]}'`)
             }
             let sql = `UPDATE packing SET ${pairs.join(',')} WHERE username = '${req.body.username}'`
-            db.run(sql, (err) => {
+            accounts.run(sql, (err) => {
                 if (err) {
                     console.log(err)
                 }
@@ -90,16 +89,16 @@ packing.updatePackingList = function(req, res) {
 
 
 packing.createTable = function() {
-    db.serialize( function () {
+    accounts.serialize( function () {
         let list = packing.list.map((item) => ` ${item} TEXT`).join(',')
-        db.run(`CREATE TABLE IF NOT EXISTS packing (username TEXT PRIMARY KEY,${list})`)
+        accounts.run(`CREATE TABLE IF NOT EXISTS packing (username TEXT PRIMARY KEY,${list})`)
     })
 }
 
 packing.createTable()
 
 let sql = `SELECT * FROM packing`;
-db.all(sql, [], (err, rows ) => {
+accounts.all(sql, [], (err, rows ) => {
   console.log(err, rows)
 });
 
