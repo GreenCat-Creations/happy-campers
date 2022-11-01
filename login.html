@@ -20,14 +20,14 @@
 
         $.post("/api/login", {
             username,
-            password
+            password,
             },
 
             function(data) {
                 if (data.success) {
                     alert(data.message)
-                    sessionStorage.setItem("username", data.username)
-                    sessionStorage.setItem("firstname", data.firstname)
+                    sessionStorage.setItem("username", data.username);
+                    sessionStorage.setItem("firstname", data.firstname);
                     document.cookie = data.token;
                     window.location.replace("/home")
                 } else {

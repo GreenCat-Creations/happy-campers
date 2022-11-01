@@ -1,0 +1,53 @@
+
+<script>
+
+    var data = {
+        
+
+    }
+    window.onload = function() {
+        var username = sessionStorage.getItem("username");
+        console.log(username);
+
+        $.post ("/api/getPackingList", {username: username}, function(data) {
+                var form = document.createElement("form")
+                for (item in data.field) {
+                    var checkbox = document.createElement("input")
+                    let label = document.createElement("label")
+                    checkbox.type = "checkbox"
+                    label.innerHTML = data.field[item]
+                    label.for = data.field[item]
+                    if (data.checked[item] == 'true') {
+                        checkbox.checked = true
+                    }
+                    form.appendChild(checkbox)
+                    form.appendChild(label)
+                }
+                document.body.appendChild(form)
+                let button = document.createElement("button")
+                button.innerHTML = "Save"
+                button.onclick = function() {
+                    var checked = []
+                    var field = []
+                    data.checked.shift()
+                    for (item in data.field) {
+                        let labels = document.getElementsByTagName("label")
+                        field[item] = labels[item].innerHTML
+                        let checkboxes = document.getElementsByTagName("input")
+                        checked[item] = checkboxes[item].checked
+                    }
+                    var message = {
+                        "username": username,
+                        "field": field,
+                        "checked": checked
+                    }
+                    $.post("/api/updatePackingList", message, function(data) {
+                        alert(data)
+                    })
+                }
+                document.body.appendChild(button)
+        })
+    }
+        
+
+</script>
