@@ -128,13 +128,13 @@
                 }, function(data) {
                     if (data.success) {
                         sessionStorage.setItem('username', data.username)
+                        sessionStorage.setItem('firstname', data.firstname)
                         window.location.href = '/home';
                     } else {
                         console.log(data)
                         alert('Registration failed. Please try again.');
                     }
                 });
-                return false;
                 "></input>
             </td>
     </table>
