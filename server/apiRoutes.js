@@ -1,4 +1,4 @@
-var db = require('./database.js')
+var accounts = require('./accounts.js')
 var packing = require('./packing.js')
 var session = require('./session.js')
 
@@ -25,7 +25,7 @@ module.exports = function(app) {
     })
 
     app.post("/api/registration", function(req, res) {
-        db.createAccount(req, res, function(data) {
+        accounts.create(req, res, function(data) {
             res.send(data)
         })
     })
