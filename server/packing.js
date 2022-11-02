@@ -1,4 +1,4 @@
-var accounts = require('./accounts.js')
+var db = require('./database.js')
 var packing = []
 
 packing.list = [
@@ -7,6 +7,7 @@ packing.list = [
     'shampoo',
     'conditioner',
     'soap',
+
 ]
 
 packing.createRow = function(req, res) {
@@ -17,21 +18,25 @@ packing.createRow = function(req, res) {
     list.unshift('username')
     let placeholders = list.map((item) => '?').join(',')
     let sql = `INSERT INTO packing VALUES (${placeholders})`
-    list[0] = req.session.username
-    accounts.run(sql, list, (err) => {
+    list[0] = req.body.username
+    db.run(sql, list, (err) => {
         if (err) {
             console.log(err)
         }
         else {
-            packing.updatePackingList(req, res)
+            let data = {
+                field : packing.list,
+                checked : list
+            }
+            res.send( "Created packing list for " + req.body.username + "!")
         }
     })
 }
 
-
+    
 
 packing.getPackingList = function(req, res) {
-    accounts.all(`SELECT * FROM packing WHERE username = '${req.session.username}'`, (err, row) => {
+    db.all(`SELECT * FROM packing WHERE username = '${req.body.username}'`, (err, row) => {
         if (err) { console.log(err) }
         if (row !== undefined && row.length > 0) {
             let checked = []
@@ -45,6 +50,7 @@ packing.getPackingList = function(req, res) {
             res.send(data)
         }
         else { 
+
             checked = []
             for (var i = 0; i < packing.list.length; i++) {
                 checked[i] = false
@@ -58,7 +64,7 @@ packing.getPackingList = function(req, res) {
 }
 
 packing.updatePackingList = function(req, res) {
-    accounts.get(`SELECT * FROM packing WHERE username = '${req.session.username}'`, (err, row) => {
+    db.get(`SELECT * FROM packing WHERE username = '${req.body.username}'`, (err, row) => {
         if (err) {
             console.log(err)
         }
@@ -68,13 +74,13 @@ packing.updatePackingList = function(req, res) {
             for (var i = 0; i < packing.list.length; i++) {
                 pairs.push(`${req.body.field[i]} = '${req.body.checked[i]}'`)
             }
-            let sql = `UPDATE packing SET ${pairs.join(',')} WHERE username = '${req.session.username}'`
-            accounts.run(sql, (err) => {
+            let sql = `UPDATE packing SET ${pairs.join(',')} WHERE username = '${req.body.username}'`
+            db.run(sql, (err) => {
                 if (err) {
                     console.log(err)
                 }
                 else {
-                    res.send('Updated packing list for ' + req.session.username + '!')
+                    res.send('Updated packing list for ' + req.body.username + '!')
                 }
             })
         }
@@ -84,16 +90,16 @@ packing.updatePackingList = function(req, res) {
 
 
 packing.createTable = function() {
-    accounts.serialize( function () {
+    db.serialize( function () {
         let list = packing.list.map((item) => ` ${item} TEXT`).join(',')
-        accounts.run(`CREATE TABLE IF NOT EXISTS packing (username TEXT PRIMARY KEY,${list})`)
+        db.run(`CREATE TABLE IF NOT EXISTS packing (username TEXT PRIMARY KEY,${list})`)
     })
 }
 
 packing.createTable()
 
 let sql = `SELECT * FROM packing`;
-accounts.all(sql, [], (err, rows ) => {
+db.all(sql, [], (err, rows ) => {
   console.log(err, rows)
 });
 

@@ -1,8 +1,13 @@
 
 <script>
-    var data = {}
+
+    var data = {
+        
+
+    }
     window.onload = function() {
         var username = sessionStorage.getItem("username");
+        console.log(username);
 
         $.post ("/api/getPackingList", {username: username}, function(data) {
                 var form = document.createElement("form")

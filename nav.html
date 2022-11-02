@@ -91,14 +91,8 @@
                 <li><a href="account">My Account</a></li>
                 <li><a onclick = "
                     if (confirm('Are you sure you want to log out?')) {
-                        $.post ('/api/logout', function(data) {
-                            if (data.success) {
-                                alert(data.message);
-                                window.location.replace('/');
-                            } else {
-                                alert(data.message);
-                            }
-                        });
+                        sessionStorage.clear();
+                        window.location.href = '/login';
                     } else {
                         return false;
                     }">Log Out</a></li>
