@@ -105,6 +105,7 @@
         <tr>
             <td>
                 <input id="register" type="submit" value="Register" onclick="
+                event.preventDefault();
                 var firstname = document.getElementById('firstname').value;
                 var lastname = document.getElementById('lastname').value;
                 var username = document.getElementById('username').value;
@@ -127,9 +128,11 @@
                     phonenumber: phonenumber
                 }, function(data) {
                     if (data.success) {
+                        alert(data.message)
                         sessionStorage.setItem('username', data.username)
                         sessionStorage.setItem('firstname', data.firstname)
-                        window.location.href = '/home';
+                        window.location.href = data.url;
+                        
                     } else {
                         console.log(data)
                         alert('Registration failed. Please try again.');

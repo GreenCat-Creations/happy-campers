@@ -33,7 +33,10 @@ packing.createRow = function(req, res) {
     })
 }
 
+<<<<<<< Updated upstream
     
+=======
+>>>>>>> Stashed changes
 
 packing.getPackingList = function(req, res) {
     db.all(`SELECT * FROM packing WHERE username = '${req.body.username}'`, (err, row) => {
@@ -87,8 +90,6 @@ packing.updatePackingList = function(req, res) {
     })
 }
 
-
-
 packing.createTable = function() {
     db.serialize( function () {
         let list = packing.list.map((item) => ` ${item} TEXT`).join(',')
@@ -98,9 +99,16 @@ packing.createTable = function() {
 
 packing.createTable()
 
+<<<<<<< Updated upstream
 let sql = `SELECT * FROM packing`;
 db.all(sql, [], (err, rows ) => {
   console.log(err, rows)
 });
+=======
+// let sql = `SELECT * FROM packing`;
+// accounts.all(sql, [], (err, rows ) => {
+//   console.log(err, rows)
+// });
+>>>>>>> Stashed changes
 
 module.exports = packing
