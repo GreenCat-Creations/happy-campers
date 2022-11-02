@@ -6,6 +6,9 @@ module.exports = function(app) {
 
     app.use( /^\/(?!.*login|.*registration|favicon.ico|.*home).*$/ , function (req, res, next) {
         let cookie = req.headers.cookie
+        if (cookie === undefined) {
+            res.redirect('/login')
+        }
         let token = cookie.split("=Bearer")[1]
         if (session[token]) {
             req.session = session[token]
@@ -31,13 +34,8 @@ module.exports = function(app) {
     })
 
     app.post("/api/getAccountInfo", function(req, res) {
-<<<<<<< Updated upstream
-        db.getAccountInfo(req, res)
-    });
-=======
         accounts.getInfo(req, res)
     })
->>>>>>> Stashed changes
 
     app.post("/api/getPackingList", function(req, res) {
         packing.getPackingList(req, res)
