@@ -4,11 +4,6 @@ var session = require('./session.js')
 
 module.exports = function(app) {
 
-<<<<<<< Updated upstream
-    app.post("/api/login", function(req, res) {
-        db.login(req, res)
-    });
-=======
     app.use( /^\/(?!.*login|.*registration|favicon.ico|.*home).*$/ , function (req, res, next) {
         let cookie = req.headers.cookie
         let token = cookie.split("=Bearer")[1]
@@ -28,7 +23,6 @@ module.exports = function(app) {
     app.post("/api/logout", function(req, res) {
         accounts.logout(req, res)
     })
->>>>>>> Stashed changes
 
     app.post("/api/registration", function(req, res) {
         db.createAccount(req, res, function(data) {

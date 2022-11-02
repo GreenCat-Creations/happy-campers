@@ -31,15 +31,9 @@
                     sessionStorage.setItem("username", data.username);
                     sessionStorage.setItem("firstname", data.firstname);
                     document.cookie = data.token;
-<<<<<<< Updated upstream
-                    window.location.replace("/home")
-                } else {
-
-=======
                     window.location.replace(data.url)
-                }
+                } 
                 if (!data.success) {
->>>>>>> Stashed changes
                     $("#notFound").show();
                 }
                 return data.success
