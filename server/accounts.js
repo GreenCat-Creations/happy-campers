@@ -20,17 +20,6 @@ function hashPassword (password, callback) {
     callback(null, hashed)
   }
 
-<<<<<<< Updated upstream:server/database.js
-  accounts.logout = function (req, res) {
-    req.session.token = null
-    res.send({
-        success : true,
-        message : 'You have been logged out. Goodbye!',
-    })
-  }
-
-  accounts.login = function (req, res) {
-=======
   accounts.logout = function (req, res) {
     let cookie = req.headers.cookie
     let token = cookie.split("=Bearer")[1]
@@ -42,7 +31,6 @@ function hashPassword (password, callback) {
   }
 
   accounts.login = function (req, res) {
->>>>>>> Stashed changes:server/accounts.js
     let username = req.body.username
     accounts.get(`SELECT * FROM accounts WHERE username = ?`, username, function (err, row) {
         if (err) {
@@ -52,17 +40,11 @@ function hashPassword (password, callback) {
             if (row) {
                 let hash = crypto.pbkdf2Sync(req.body.password, row.salt, 1000, 64, `sha512`).toString('hex');
                 if (hash === row.hash) {
-<<<<<<< Updated upstream:server/database.js
-                    let token = jwt.sign({username: username}, 'secret', {expiresIn: '1000h'})
-                    res.send ( {
-                        message: 'login successful',
-=======
                     let token = jwt.sign({username: username}, 'secret', {expiresIn: '30s'})
                     res.cookie('access_token', 'Bearer' + token, {})
                     session.new(row, token)
                     res.send ({
                         message: 'Login successful!',
->>>>>>> Stashed changes:server/accounts.js
                         success: true,
                         username: row.username,
                         firstname: row.firstname,
