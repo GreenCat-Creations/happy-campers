@@ -6,17 +6,18 @@ module.exports = function(app) {
 
     app.use( /^\/(?!.*login|.*registration|favicon.ico|.*home).*$/ , function (req, res, next) {
         let cookie = req.headers.cookie
-        if (cookie === undefined) {
+        if (cookie === undefined || cookie === null || cookie === '') {
             res.redirect('/login')
-        }
-        let token = cookie.split("=Bearer")[1]
-        if (session[token]) {
-            req.session = session[token]
-            next()
-        }
-        if (!session[token]) {
-            res.redirect('/login')
-        }
+        } else {
+            var token = cookie.split("=Bearer")[1]
+            if (!session[token]) {
+                res.redirect('/login')
+                }
+            }
+            if (session[token]) {
+                req.session = session[token]
+                next()
+            }
     })
 
     app.post("/api/login", function(req, res) {
