@@ -3,17 +3,22 @@ var packing = require('./packing.js')
 
 module.exports = function(app) {
 
-    app.use( '/', function (req, res, next) {
+    app.use( /^\/(?!.*login|.*registration|favicon.ico|.*home).*$/ , function (req, res, next) {
         let cookie = req.headers.cookie
         let token = cookie.split("=Bearer")[1]
+        req.session = {}
         if (token) {
             accounts.verifyToken(token, function (err, decoded) {
                 if (err) {
                     console.log(err)
                 }
                 else {
-                    console.log(decoded)
+                    if (!req.session) { res.redirect('/login') }
+                    else {
+                    req.session.token = token
+                    req.session.username = decoded.username
                     next()
+                    }
                 }
             })
         }
@@ -24,6 +29,10 @@ module.exports = function(app) {
 
     app.post("/api/login", function(req, res) {
         accounts.login(req, res)
+    });
+
+    app.post("/api/logout", function(req, res) {
+        accounts.logout(req, res)
     });
 
     app.post("/api/registration", function(req, res) {

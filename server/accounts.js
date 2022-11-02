@@ -9,17 +9,24 @@ accounts.serialize( function () {
     lastname TEXT, email TEXT, phonenumber TEXT, created TEXT, updated TEXT)`)
 })
 
-
 function hashPassword (password, callback) {
-    var salt = crypto.randomBytes(16).toString('hex');
-    var hash = crypto.pbkdf2Sync(password, salt, 1000, 64, `sha512`).toString('hex');
+    var salt = crypto.randomBytes(16).toString('hex')
+    var hash = crypto.pbkdf2Sync(password, salt, 1000, 64, `sha512`).toString('hex')
     var hashed = {
       salt: salt,
       hash: hash
     }
     callback(null, hashed)
   }
-  
+
+  accounts.logout = function (req, res) {
+    req.session.token = null
+    res.send({
+        success : true,
+        message : 'You have been logged out. Goodbye!',
+    })
+  }
+
   accounts.login = function (req, res) {
     let username = req.body.username
     accounts.get(`SELECT * FROM accounts WHERE username = ?`, username, function (err, row) {
@@ -32,20 +39,19 @@ function hashPassword (password, callback) {
                 if (hash === row.hash) {
                     let token = jwt.sign({username: username}, 'secret', {expiresIn: '1000h'})
                     res.cookie('access_token', 'Bearer' + token, {
-                        maxAge: 1000 * 60 * 60 * 24 * 7,
+                        maxAge: 1000 * 60,
                     })
                     res.send ({
-                        message: 'login successful',
+                        message: 'Login successful!',
                         success: true,
-                        token: token,
                         username: row.username,
                         firstname: row.firstname,
-                        url: '/login'
+                        url: '/home'
                     })
                 }
                 else {
                     res.send({
-                        message: 'password incorrect',
+                        message: 'Incorrect password',
                         success: false,
                         url: '/login',
                     })
@@ -53,7 +59,7 @@ function hashPassword (password, callback) {
             }
             else {
                 res.send({
-                    message: 'username not found',
+                    message: 'Account not found',
                     success: false,
                     url: '/login',
                 })
@@ -61,8 +67,6 @@ function hashPassword (password, callback) {
         }
     })
 }
-
-
 
 accounts.create = function(req, res) {
     accounts.get(`SELECT username FROM accounts WHERE username = '${req.body.username}'`, (err, row) => {
@@ -96,7 +100,6 @@ accounts.create = function(req, res) {
       }
       else {
         res.send(row)
-        console.log(row)
       }
     })
   }
@@ -107,7 +110,6 @@ accounts.create = function(req, res) {
         callback(err)
       }
       else {
-
         callback(null, decoded)
       }
     })
