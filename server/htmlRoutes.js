@@ -49,8 +49,11 @@ module.exports = function(app) {
     });
     
   app.get("/favicon.ico", function(req, res) {
-    res.sendFile(path.join(__dirname, "../favicon.ico"
-    ));
+    res.sendFile(path.join(__dirname, "../favicon.ico"))
+  });
+
+  app.get("/src/style.css", function(req, res) {
+    res.sendFile(path.join(__dirname, "../src/style.css"))
   });
 
   app.get("*", function(req, res) {

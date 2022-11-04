@@ -4,7 +4,7 @@ var session = require('./session.js')
 
 module.exports = function(app) {
 
-    app.use( /^\/(?!.*login|.*registration|favicon.ico|.*home).*$/ , function (req, res, next) {
+    app.use( /^\/(?!.*login|.*registration|favicon.ico|.*home|.*style.css).*$/ , function (req, res, next) {
         let cookie = req.headers.cookie
         if (cookie === undefined || cookie === null || cookie === '') {
             res.redirect('/login')

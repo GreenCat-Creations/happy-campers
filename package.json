@@ -3,5 +3,12 @@
     "express": "^4.18.2",
     "jsonwebtoken": "^8.5.1",
     "sqlite3": "^5.1.2"
-  }
+  },
+  "devDependencies": {
+    "node-sass": "^7.0.3",
+    "sass": "^1.56.0"
+  },
+  "scripts" : {
+    "node-sass": "sass src/style.scss src/style.css"
+}
 }
