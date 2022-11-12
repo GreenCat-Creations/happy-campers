@@ -104,6 +104,30 @@
 
         <tr>
             <td>
+                <label>Leader</label><br>
+                <input id="leader"
+                type="checkbox"
+                ></input>
+            </td>
+
+            <td>
+                <label>Parent</label><br>
+                <input id="parent"
+                type="checkbox"
+                ></input>
+            </td>
+
+            <td>
+                <label>Camper</label><br>
+                <input id="camper"
+                type="checkbox"
+                ></input>
+
+            </td>
+        </tr>
+
+        <tr>
+            <td>
                 <input id="register" type="submit" value="Register" onclick="
                 event.preventDefault();
                 var firstname = document.getElementById('firstname').value;
@@ -113,7 +137,9 @@
                 // var confirm_password = document.getElementById('confirm_password').value;
                 var email = document.getElementById('email').value;
                 var phonenumber = document.getElementById('phone_number').value;
-
+                var camper = document.getElementById('camper').checked;
+                var parent = document.getElementById('parent').checked;
+                var leader = document.getElementById('leader').checked;
                 // if (password != confirm_password) {
                 //     alert('Passwords do not match.');
                 //     return false;
@@ -125,7 +151,10 @@
                     username: username,
                     password: password,
                     email: email,
-                    phonenumber: phonenumber
+                    phonenumber: phonenumber,
+                    camper: camper,
+                    parent: parent,
+                    leader: leader,
                 }, function(data) {
                     if (data.success) {
                         alert(data.message)

@@ -7,7 +7,7 @@ var accounts = new sqlite.Database("accounts.db")
 
 accounts.serialize( function () {
   accounts.run(`CREATE TABLE IF NOT EXISTS accounts (username TEXT PRIMARY KEY, salt TEXT, hash TEXT, firstname TEXT, 
-    lastname TEXT, email TEXT, phonenumber TEXT, created TEXT, updated TEXT)`)
+    lastname TEXT, email TEXT, phonenumber TEXT, created TEXT, updated TEXT, camper TEXT, parent TEXT, leader TEXT)`)
 })
 
 function hashPassword (password, callback) {
@@ -77,9 +77,9 @@ accounts.create = function(req, res) {
       }
       else {
         hashPassword(req.body.password, (err, hash) => {
-          accounts.run(`INSERT INTO accounts (username, hash, salt, firstname, lastname, email, phonenumber, created, updated) VALUES 
+          accounts.run(`INSERT INTO accounts (username, hash, salt, firstname, lastname, email, phonenumber, camper, parent, leader, created, updated) VALUES 
             ('${req.body.username}', '${hash.hash}', '${hash.salt}', '${req.body.firstname}', '${req.body.lastname}',
-            '${req.body.email}', '${req.body.phonenumber}', '${Date.now()}', '${Date.now()}' )`, (err) => {
+            '${req.body.email}', '${req.body.phonenumber}', '${req.body.camper}', '${req.body.parent}', '${req.body.leader}', '${Date.now()}', '${Date.now()}' )`, (err) => {
               if (err) {
                 console.log(err)
               }
